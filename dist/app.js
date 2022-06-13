@@ -2,16 +2,11 @@ const ToDoListContainer = document.querySelector(".tasks");
 const ToDoListInput = document.querySelector(".inputTask");
 const ToDoListAddButton = document.querySelector(".btn");
 const tasks = [
-    { task: "Wyrzucić śmieci", done: false },
-    { task: "Pójść na siłke", done: true },
-    { task: "Nakarmić koty", done: false },
+    { name: "Wyrzucić śmieci", done: false },
+    { name: "Pójść na siłke", done: true },
+    { name: "Nakarmić koty", done: false },
 ];
 const render = (tasks) => {
-    /* <li>
-<label for="task-1">Wyrzucić śmieci</label>
-<input type="checkbox" id="task-1" name="Wyrzucić śmieci" />
-</li>
-*/
     ToDoListContainer.innerText = "";
     tasks.forEach((task, index) => {
         const taskLi = document.createElement("li");
@@ -19,10 +14,13 @@ const render = (tasks) => {
         const label = document.createElement("label");
         const id = `task-${index}`;
         label.setAttribute("for", id);
-        checkbox.name = task.task;
+        checkbox.name = task.name;
         checkbox.type = "checkbox";
         checkbox.checked = task.done;
-        label.innerText = task.task;
+        label.innerText = task.name;
+        checkbox.addEventListener("change", () => {
+            task.done = !task.done;
+        });
         taskLi.appendChild(label);
         taskLi.appendChild(checkbox);
         ToDoListContainer.appendChild(taskLi);
@@ -30,10 +28,10 @@ const render = (tasks) => {
 };
 render(tasks);
 const addToList = (task) => {
-    tasks.push({ task, done: false });
+    tasks.push(task);
 };
 ToDoListAddButton.addEventListener("click", (e) => {
     e.preventDefault();
-    addToList(ToDoListInput.value);
+    addToList({ name: ToDoListInput.value, done: false });
     render(tasks);
 });

@@ -2,18 +2,13 @@ const ToDoListContainer: HTMLElement = document.querySelector(".tasks");
 const ToDoListInput: HTMLInputElement = document.querySelector(".inputTask");
 const ToDoListAddButton: HTMLButtonElement = document.querySelector(".btn");
 
-const tasks: { task: string; done: boolean }[] = [
-  { task: "Wyrzucić śmieci", done: false },
-  { task: "Pójść na siłke", done: true },
-  { task: "Nakarmić koty", done: false },
+const tasks: { name: string; done: boolean }[] = [
+  { name: "Wyrzucić śmieci", done: false },
+  { name: "Pójść na siłke", done: true },
+  { name: "Nakarmić koty", done: false },
 ];
 
-const render = (tasks: { task: string; done: boolean }[]): void => {
-    /* <li>
-<label for="task-1">Wyrzucić śmieci</label>
-<input type="checkbox" id="task-1" name="Wyrzucić śmieci" />
-</li>
-*/
+const render = (tasks: { name: string; done: boolean }[]): void =>  {
 
   ToDoListContainer.innerText = "";
   tasks.forEach((task, index) => {
@@ -24,10 +19,14 @@ const render = (tasks: { task: string; done: boolean }[]): void => {
     const id: string = `task-${index}`
     label.setAttribute("for", id);
 
-    checkbox.name = task.task;
+    checkbox.name = task.name;
     checkbox.type = "checkbox";
     checkbox.checked = task.done;
-    label.innerText = task.task;
+    label.innerText = task.name;
+
+    checkbox.addEventListener("change", () => {
+      task.done = !task.done;
+    })
 
     taskLi.appendChild(label);
     taskLi.appendChild(checkbox);
@@ -37,12 +36,12 @@ const render = (tasks: { task: string; done: boolean }[]): void => {
 
 render(tasks);
 
-const addToList = (task: string) => {
-  tasks.push({task, done: false});
+const addToList = (task: {name: string, done: boolean}) => {
+  tasks.push(task);
 };
 
 ToDoListAddButton.addEventListener("click", (e) => {
   e.preventDefault();
-  addToList(ToDoListInput.value);
+  addToList({name: ToDoListInput.value, done: false});
   render(tasks);
 });
